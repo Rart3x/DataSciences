@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  adminer:
+    container_name: adminer
+    hostname: adminer
+    build:
+      context: .
+      dockerfile: ./services/adminer/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./services/adminer/adminer-data:/var/lib/adminer/adminer-data
+    networks:
+      - main
+
+  db:
+    container_name: db
+    hostname: db
+    build:
+      context: .
+      dockerfile: ./services/db/Dockerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./services/db/db-data:/var/lib/postgresql/db-data
+    networks:
+      - main
+
+networks:
+  main:
+    name: main
+    driver: bridge
+
+volumes:
+  adminer-data:
+    name: adminer-data
+    driver: bridge
+  db-data:
+    name: db-data
+    driver: bridge

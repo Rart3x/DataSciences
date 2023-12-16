@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: db
+    hostname: db
+    build:
+      context: .
+      dockerfile: ./services/db/Dockerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./services/db/db-data:/var/lib/postgresql/db-data
+
+volumes:
+  db-data:
+    name: db-data
+    driver: bridge
