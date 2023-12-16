@@ -9,6 +9,9 @@ services:
       dockerfile: ./services/adminer/Dockerfile
     ports:
       - "8080:8080"
+    depends_on:
+      python-runner:
+        condition: service_healthy
     volumes:
       - ./services/adminer/adminer-data:/var/lib/adminer/adminer-data
     networks:
@@ -22,8 +25,27 @@ services:
       dockerfile: ./services/db/Dockerfile
     ports:
       - "5432:5432"
+    depends_on:
+      python-runner:
+        condition: service_healthy
     volumes:
       - ./services/db/db-data:/var/lib/postgresql/db-data
+    networks:
+      - main
+
+  python-runner:
+    container_name: python-runner
+    hostname: python-runner
+    build:
+      context: .
+      dockerfile: ./services/python-runner/Dockerfile
+    healthcheck:
+      test: ["CMD", "python", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - ./services/python-runner/python-runner-data:/var/lib/python-runner/python-runner-data
     networks:
       - main
 
@@ -38,4 +60,7 @@ volumes:
     driver: bridge
   db-data:
     name: db-data
+    driver: bridge
+  python-runner-data:
+    name: python-runner-data
     driver: bridge
