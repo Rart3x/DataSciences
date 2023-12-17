@@ -1,9 +1,13 @@
 FROM python:latest
 
-RUN mkdir /scripts
+RUN pip install --upgrade pip
+RUN pip install psycopg2-binary
 
-COPY /scripts/*.py /scripts/
+WORKDIR /work
 
-WORKDIR /scripts
+RUN mkdir -p /work/scripts/customers
 
-RUN "python create_env_from_CSV.py"
+COPY services/python-runner/scripts/*.py /work/scripts/
+COPY services/db/customer/*.csv /work/scripts/customers/
+
+RUN python /work/scripts/create_env_from_CSV.py
