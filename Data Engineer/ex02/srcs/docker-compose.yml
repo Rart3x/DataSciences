@@ -22,6 +22,11 @@ services:
       dockerfile: ./services/db/Dockerfile
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U localhost -d piscineds"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     volumes:
       - ./services/db/db-data:/var/lib/postgresql/db-data
     networks:
@@ -33,6 +38,9 @@ services:
     build:
       context: .
       dockerfile: ./services/python-runner/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
     tty: true
     volumes:
       - ./services/python-runner/python-runner-data:/var/lib/python-runner/python-runner-data

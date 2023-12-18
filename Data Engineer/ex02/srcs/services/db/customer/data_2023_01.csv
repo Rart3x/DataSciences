@@ -1,1 +1,3 @@
-fichier numero 1 
+id, name, birth, alive
+1,kramjatt,11/12/1997,true
+2,dguillau,01/01/2001,true
