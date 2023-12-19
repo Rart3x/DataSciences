@@ -1,34 +1,32 @@
-import os, psycopg2
+import os
+import psycopg2
 from dateutil import parser
+from colorama import Fore, Style
 
+# Database connection
 conn = psycopg2.connect(
     dbname="piscineds",
-    host="localhost",
+    host="db",
     user="kramjatt",
     password="mysecretpassword",
     port="5432",
 )
 cursor = conn.cursor()
 
-# directory = './customers/'
-directory = '../../db/customer/'
+# Repository
+DIRECTORY = '/work/scripts/customers/'
 
-def create_fields(table_name, types_dict):
-    for key in types_dict:
-        alter_query = f'ALTER TABLE {table_name} ADD COLUMN IF NOT EXISTS "{key}" {types_dict[key]}'
-        cursor.execute(alter_query)
-        conn.commit()
+# Errors
+DATE_ERROR = f"{Fore.RED}error: first field must be a date for : {Style.RESET_ALL}"
+FIELD_ERROR = f"{Fore.RED}error: fields must be the same for : {Style.RESET_ALL}"
+FIELD_NUMBER_ERROR = f"{Fore.RED}error: number of fields must be the same for : {Style.RESET_ALL}"
 
-def create_tables(table_name):
-    create_query = f"CREATE TABLE IF NOT EXISTS {table_name} (id SERIAL PRIMARY KEY)"
-    cursor.execute(create_query)
-    conn.commit()
-
-def define_type(field):
+# Type define
+def defineType(field):
     try:
-        if field.lower() == "true" or field.lower() == "false":
+        if field.lower() in ["true", "false"]:
             return "BOOLEAN"
-    
+        
         int(field)
         return "INTEGER"
 
@@ -40,35 +38,40 @@ def define_type(field):
         except ValueError:
             return "VARCHAR(255)"
 
-def insert_data(table_name, fields, file_content):
-    for line in file_content[1:]:
+# Tables creations
+def createTable(tableName, fields):
+    field_definitions = ', '.join([f'"{field}" {fields[field]}' for field in fields])
+    createQuery = f"CREATE TABLE IF NOT EXISTS {tableName} ({field_definitions})"
+    cursor.execute(createQuery)
+    conn.commit()
+
+# Tables inserts
+def insertData(tableName, fields, fileContent):
+    for line in fileContent[1:]:
+        lineTypes = [defineType(value.strip()) for value in line.split(',')]
+        if lineTypes != [fields[key] for key in fields]:
+            print(FIELD_ERROR + tableName + " at line: " + line)
+            return
         values = line.split(',')
-        formatted_values = [f"'{value.strip()}'" for value in values]
-        insert_query = f'INSERT INTO {table_name} ({", ".join(fields)}) VALUES ({", ".join(formatted_values)})'
+        strippedValues = [f"'{value.strip()}'" for value in values]
+        insert_query = f'INSERT INTO {tableName} ({", ".join(fields)}) VALUES ({", ".join(strippedValues)})'
         cursor.execute(insert_query)
         conn.commit()
 
-def fill_types_dict(fields, table_name, types):
-    types_dict = {}
-    for i in range(len(fields)):
-        types_dict[fields[i].strip()] = define_type(types[i].strip())
-    create_fields(table_name, types_dict)
-
-fields = []
-file_content = []
-py_files_content = []
-
-for filename in os.listdir(directory):
+# CSV treatments
+for filename in os.listdir(DIRECTORY):
     if filename.endswith('.csv'):
-        table_name = filename[:-4]
-        create_tables(table_name)
-        with open(os.path.join(directory, filename), 'r') as file:
-            file_content = file.readlines()
-            if file_content.__len__() > 1:
-                fields = file_content[0].split(',')
-                types = file_content[1].split(',')
-                fill_types_dict(fields, table_name, types)
-                insert_data(table_name, fields, file_content)
+        tableName = filename[:-4]
+        with open(os.path.join(DIRECTORY, filename), 'r') as file:
+            fileContent = file.readlines()
+            if len(fileContent) > 1:
+                fields = {field.strip(): defineType(value.strip()) for field, value in zip(fileContent[0].split(','), fileContent[1].split(','))}
+                if fields[fileContent[0].split(',')[0].strip()] == "DATE":
+                    createTable(tableName, fields)
+                    insertData(tableName, fields, fileContent)
+                else:
+                    print(DATE_ERROR + tableName)
 
+# Close connections
 cursor.close()
 conn.close()
