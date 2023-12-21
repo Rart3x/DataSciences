@@ -10,4 +10,4 @@ RUN mkdir -p /work/scripts/customers
 COPY services/python-runner/scripts/*.py /work/scripts/
 COPY services/db/customer/*.csv /work/scripts/customers/
 
-CMD ["python", "./scripts/table.py"]
+CMD ["python", "./scripts/automatic_table.py"]
