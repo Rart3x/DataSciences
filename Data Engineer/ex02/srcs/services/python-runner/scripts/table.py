@@ -51,12 +51,12 @@ def insertData(tableName, fields, fileContent):
         lineTypes = [defineType(value.strip()) for value in line.split(',')]
         if lineTypes != [fields[key] for key in fields]:
             print(FIELD_ERROR + tableName + " at line: " + line)
-            return
-        values = line.split(',')
-        strippedValues = [f"'{value.strip()}'" for value in values]
-        insert_query = f'INSERT INTO {tableName} ({", ".join(fields)}) VALUES ({", ".join(strippedValues)})'
-        cursor.execute(insert_query)
-        conn.commit()
+        else:
+            values = line.split(',')
+            strippedValues = [f"'{value.strip()}'" for value in values]
+            insert_query = f'INSERT INTO {tableName} ({", ".join(fields)}) VALUES ({", ".join(strippedValues)})'
+            cursor.execute(insert_query)
+            conn.commit()
 
 # CSV treatments
 for filename in os.listdir(DIRECTORY):
