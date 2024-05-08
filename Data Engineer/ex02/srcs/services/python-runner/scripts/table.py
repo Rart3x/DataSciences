@@ -1,6 +1,7 @@
 import os
 import psycopg2
-from dateutil import parser
+
+from datetime import datetime
 from colorama import Fore, Style
 
 # Database connection
@@ -37,11 +38,16 @@ def defineType(field):
 
     except ValueError:
         try:
-            parser.parse(field)
+            datetime.strptime(field, '%Y-%m-%d %H:%M:%S %Z')
             return "DATE"
 
         except ValueError:
-            return "VARCHAR(255)"
+            try:
+                datetime.strptime(field, '%m/%d/%Y')
+                return "DATE"
+            
+            except ValueError:
+                return "VARCHAR(255)"
 
 # Tables creations
 def createTable(tableName, fields):
