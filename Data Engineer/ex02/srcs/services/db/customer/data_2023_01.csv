@@ -1,5 +1,5 @@
 birth, name, sexe, alive
 11/12/1997,kramjatt,h,true
-11/12/1997,kramjatt,h,true
-2,dguillau,01/01/2001,true
-11/12/1997,kramjatt,h,true
+11/12/1997,kramjatt,h,false, test 
+2,dguillau,01/01/2001,plop
+11/12/1997,kramjatt,h,TRUE
