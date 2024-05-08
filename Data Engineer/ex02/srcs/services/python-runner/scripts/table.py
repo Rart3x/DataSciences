@@ -38,16 +38,23 @@ def defineType(field):
 
     except ValueError:
         try:
-            datetime.strptime(field, '%Y-%m-%d %H:%M:%S %Z')
-            return "DATE"
-
+            float(field)
+            return "FLOAT"
+        
         except ValueError:
+            if len(field) == 1:
+                return "CHAR"
             try:
-                datetime.strptime(field, '%m/%d/%Y')
+                datetime.strptime(field, '%Y-%m-%d %H:%M:%S %Z')
                 return "DATE"
-            
+
             except ValueError:
-                return "VARCHAR(255)"
+                try:
+                    datetime.strptime(field, '%m/%d/%Y')
+                    return "DATE"
+                
+                except ValueError:
+                    return "VARCHAR(255)"
 
 # Tables creations
 def createTable(tableName, fields):
