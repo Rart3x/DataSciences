@@ -7,5 +7,10 @@ services:
     build:
       context: .
       dockerfile: ./services/db/Dockerfile
-    ports:
-      - "5432:5432"
+    networks:
+      - data
+
+networks:
+  data:
+    driver: bridge
+    name: data_net

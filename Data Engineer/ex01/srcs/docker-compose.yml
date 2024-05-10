@@ -12,18 +12,7 @@ services:
     networks:
       - main
 
-  db:
-    container_name: db
-    hostname: db
-    build:
-      context: .
-      dockerfile: ./services/db/Dockerfile
-    ports:
-      - "5432:5432"
-    networks:
-      - main
-
 networks:
   main:
-    name: main
-    driver: bridge
+    external:
+      name: data_net

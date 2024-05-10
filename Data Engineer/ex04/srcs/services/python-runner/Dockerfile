@@ -9,7 +9,7 @@ RUN mkdir -p /work/scripts/customers
 RUN mkdir -p /work/scripts/items
 
 COPY services/python-runner/scripts/*.py /work/scripts/
-COPY services/db/customer/*.csv /work/scripts/customers/
-COPY services/db/items/*.csv /work/scripts/items/
+COPY customer/*.csv /work/scripts/customers/
+COPY items/*.csv /work/scripts/items/
 
 CMD ["python", "./scripts/items_table.py"]

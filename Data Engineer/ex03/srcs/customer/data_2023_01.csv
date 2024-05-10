@@ -1,0 +1,5 @@
+birth, name, sexe, alive, float
+11/12/1997,kramjatt,h,true, 0.5
+11/12/1997,kramjatt,h,false,0.4
+2,dguillau,01/01/2001,false, 1.3
+11/12/1997,kramjatt,h,TRUE, 8.9
