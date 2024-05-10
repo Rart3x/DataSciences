@@ -34,7 +34,7 @@ def defineType(field):
             return "BOOLEAN"
         
         int(field)
-        return "INTEGER"
+        return "BIGINT"
 
     except ValueError:
         try:
