@@ -10,6 +10,5 @@ fclean:
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
-	@rm -rf ./srcs/services/db/db-data ./srcs/services/adminer/adminer-data
 
 re: down all
