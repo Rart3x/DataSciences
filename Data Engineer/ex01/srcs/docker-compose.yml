@@ -9,8 +9,6 @@ services:
       dockerfile: ./services/adminer/Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - ./services/adminer/adminer-data:/var/lib/adminer/adminer-data
     networks:
       - main
 
@@ -22,20 +20,10 @@ services:
       dockerfile: ./services/db/Dockerfile
     ports:
       - "5432:5432"
-    volumes:
-      - ./services/db/db-data:/var/lib/postgresql/db-data
     networks:
       - main
 
 networks:
   main:
     name: main
-    driver: bridge
-
-volumes:
-  adminer-data:
-    name: adminer-data
-    driver: bridge
-  db-data:
-    name: db-data
     driver: bridge

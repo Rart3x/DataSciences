@@ -7,7 +7,7 @@ WORKDIR /work
 
 RUN mkdir -p /work/scripts/customers
 
-COPY services/customer/*.csv /work/scripts/customers/
+COPY services/db/customer/*.csv /work/scripts/customers/
 COPY services/python-runner/scripts/*.py /work/scripts/
 COPY services/python-runner/scripts/*.sh /work/scripts/
 

@@ -9,8 +9,6 @@ services:
       dockerfile: ./services/adminer/Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - ./services/adminer/adminer-data:/var/lib/adminer/adminer-data
     networks:
       - main
 
@@ -27,8 +25,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-    volumes:
-      - ./services/db/db-data:/var/lib/postgresql/db-data
     networks:
       - main
 
@@ -42,23 +38,10 @@ services:
       db:
         condition: service_healthy
     tty: true
-    volumes:
-      - ./services/python-runner/python-runner-data:/var/lib/python-runner/python-runner-data
     networks:
       - main
 
 networks:
   main:
     name: main
-    driver: bridge
-
-volumes:
-  adminer-data:
-    name: adminer-data
-    driver: bridge
-  db-data:
-    name: db-data
-    driver: bridge
-  python-runner-data:
-    name: python-runner-data
     driver: bridge
