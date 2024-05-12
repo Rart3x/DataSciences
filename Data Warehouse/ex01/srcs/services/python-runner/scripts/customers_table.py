@@ -24,8 +24,6 @@ if filtered_tables:
     merge_query = "CREATE TABLE customers AS SELECT * FROM {};".format(' UNION ALL SELECT * FROM '.join(filtered_tables))
     cursor.execute(merge_query)
     conn.commit()
-else:
-    print("error: no tables to merge")
 
 # Close connections
 cursor.close()

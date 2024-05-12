@@ -13,5 +13,5 @@ services:
 
 networks:
   main:
-    name: main
-    driver: bridge
+    name: data_net
+    external: true

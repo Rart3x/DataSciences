@@ -10,7 +10,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - main
+      - data
 
   db:
     container_name: db
@@ -21,9 +21,9 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - main
+      - data
 
 networks:
-  main:
-    name: main
+  data:
     driver: bridge
+    name: data_net
