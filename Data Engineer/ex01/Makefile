@@ -10,5 +10,7 @@ fclean:
 	@docker system prune --all --force --volumes
 	@docker network prune --force
 	@docker volume prune --force
+	@docker stop adminer > /dev/null 2>&1 || true
+	@docker rm adminer > /dev/null 2>&1 || true
 
 re: down all
