@@ -13,16 +13,18 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()
 
-idx = 0
+def define_occurencies_q(columns):
+    column_definitions = ', '.join([f'{column[0]}' for column in columns])
+    return f"SELECT COUNT(*) AS occurencies, {column_definitions} FROM customers GROUP BY {column_definitions} HAVING COUNT(*) > 1;"
 
-#Delete duplicate rows
-query = "SELECT * FROM customers"
+# Querys
+columns_query = "SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';"
 
-cursor.execute(query)
-rows = cursor.fetchall()
+# Fetch all columns from customers table
+cursor.execute(columns_query)
+columns = cursor.fetchall()
 
-for row in rows:
-    print(row)
+print(define_occurencies_q(columns))
 
 # Close connections
 cursor.close()
