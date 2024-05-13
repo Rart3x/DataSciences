@@ -15,7 +15,7 @@ cursor = conn.cursor()
 
 def define_occurencies_q(columns):
     column_definitions = ', '.join([f'{column[0]}' for column in columns])
-    return f"SELECT COUNT(*) AS occurencies, {column_definitions} FROM customers GROUP BY {column_definitions} HAVING COUNT(*) > 1;"
+    return f"SELECT {column_definitions} FROM customers GROUP BY {column_definitions} HAVING COUNT(*) > 1;"
 
 # Querys
 columns_query = "SELECT column_name FROM information_schema.columns WHERE table_name = 'customers';"
