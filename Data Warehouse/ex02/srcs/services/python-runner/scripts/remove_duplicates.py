@@ -13,6 +13,7 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()
 
+# Define duplicates occurencies query
 def define_occurencies_q(columns):
     column_definitions = ', '.join([f'{column[0]}' for column in columns])
     return f"""
@@ -22,6 +23,7 @@ def define_occurencies_q(columns):
         HAVING COUNT(*) > 1;
     """
 
+# Delete duplicates occurencies query
 def del_occurencies_q(columns, occurencies):
     column_definitions = ', '.join([f'{column[0]}' for column in columns])
     return f"""

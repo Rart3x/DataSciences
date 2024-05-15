@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+   python-runner:
+    container_name: python-runner
+    hostname: python-runner
+    build:
+      context: .
+      dockerfile: ./services/python-runner/Dockerfile
+    tty: true
+    networks:
+      - main
+
+networks:
+  main:
+    name: data_net
+    external: true
